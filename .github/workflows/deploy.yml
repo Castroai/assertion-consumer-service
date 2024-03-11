@@ -15,8 +15,8 @@ jobs:
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      ECS_CLUSTER: my-ecs-cluster
-      ECS_SERVICE: my-ecs-service
+      ECS_CLUSTER: DevCluster
+      ECS_SERVICE: service-name
 
     steps:
       - name: Checkout code
