@@ -13,6 +13,10 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+RUN yarn prisma generate
+
+COPY prisma ./prisma/
+
 # Creates a "dist" folder with the production build
 RUN npm run build
 
