@@ -8,7 +8,7 @@ export class AppService {
   async getHello() {
     try {
       const data = await this.prisma.test.findMany();
-      return JSON.stringify(data);
+      return data;
     } catch (error) {
       throw error;
     }
