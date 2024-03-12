@@ -33,6 +33,9 @@ jobs:
       - name: Amazon ECR Login
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Apply all pending migrations to the database
+        run: npx prisma migrate deploy
+
       - name: Build and push Docker image to ECR
         run: |
           docker build -t $ECR_REPO .
