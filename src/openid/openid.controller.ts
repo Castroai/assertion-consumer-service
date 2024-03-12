@@ -10,7 +10,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 const OpenIDConnectStrategy = passportOIDC.Strategy;
 
 @Controller('/openid')
-export class AppController {
+export class OpenIdController {
   constructor(public readonly prisma: PrismaService) {}
   private getDomainFromEmail(email: string) {
     let domain: string;
@@ -41,7 +41,7 @@ export class AppController {
         clientID: org.client_id,
         clientSecret: org.client_secret,
         scope: 'profile email',
-        callbackURL: 'http://localhost:3333/openid/callback/' + org.id,
+        callbackURL: process.env.CALLBACK_URL + org.id,
       },
       async function verify(issuer, profile, cb) {
         let user = await prisma.user.findFirst({

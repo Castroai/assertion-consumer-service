@@ -7,6 +7,7 @@ import { BearerStrategy } from './bearer.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { PrismaService } from './prisma/prisma.service';
 import { OpenIdModule } from './openid/openid.module';
+import { OpenIdController } from './openid/openid.controller';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { OpenIdModule } from './openid/openid.module';
     PassportModule,
     OpenIdModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, OpenIdController],
   providers: [AppService, BearerStrategy, PrismaService],
 })
 export class AppModule {}
