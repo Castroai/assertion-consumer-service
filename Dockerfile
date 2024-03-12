@@ -13,7 +13,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-RUN yarn prisma generate
+RUN npx prisma generate
 
 COPY prisma ./prisma/
 
