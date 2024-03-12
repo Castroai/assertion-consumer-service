@@ -11,12 +11,12 @@ jobs:
 
     env:
       AWS_REGION: us-east-1
-      ECR_REPO: my-ecr-repo
+      ECR_REPO: my-ecr-repository
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      ECS_CLUSTER: DevCluster
-      ECS_SERVICE: service-name
+      ECS_CLUSTER: MyCluster
+      ECS_SERVICE: MyService
 
     steps:
       - name: Checkout code

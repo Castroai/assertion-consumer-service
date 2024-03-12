@@ -1,5 +1,5 @@
 # Base image
-FROM node:lts
+FROM --platform=linux/amd64 node:lts-alpine
 
 # Create app directory
 WORKDIR /usr/src/app
