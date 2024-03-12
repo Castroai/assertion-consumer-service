@@ -17,7 +17,7 @@ RUN npx prisma generate
 
 COPY prisma ./prisma/
 
-RUN npx prisma migrate dev
+# RUN npx prisma migrate dev
 
 # Creates a "dist" folder with the production build
 RUN npm run build
