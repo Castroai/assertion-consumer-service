@@ -41,7 +41,7 @@ export class OpenIdController {
         clientID: org.client_id,
         clientSecret: org.client_secret,
         scope: 'profile email',
-        callbackURL: process.env.CALLBACK_URL + org.id,
+        callbackURL: process.env.CALLBACK_URL_EXTERNAL + org.id,
       },
       async function verify(issuer, profile, cb) {
         let user = await prisma.user.findFirst({
