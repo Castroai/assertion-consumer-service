@@ -32,6 +32,8 @@ export class OpenIdController {
     return org;
   }
   private createStrategy(org, prisma = this.prisma) {
+    console.log(process.env.CALLBACK_URL_EXTERNAL);
+
     return new OpenIDConnectStrategy(
       {
         issuer: org.issuer,
@@ -43,6 +45,7 @@ export class OpenIdController {
         scope: 'profile email',
         callbackURL: process.env.CALLBACK_URL_EXTERNAL + org.id,
       },
+
       async function verify(issuer, profile, cb) {
         let user = await prisma.user.findFirst({
           where: {
@@ -117,6 +120,10 @@ export class OpenIdController {
     @Next() next: NextFunction,
   ) {
     console.log(`ID`);
+    console.log(
+      `process.env.CALLBACK_URL_EXTERNAL`,
+      process.env.CALLBACK_URL_EXTERNAL,
+    );
 
     const org = await this.orgFromId(req.params.id);
     if (!org) {
@@ -135,6 +142,7 @@ export class OpenIdController {
     @Res() res: Response,
     @Next() next: NextFunction,
   ) {
+    console.log(process.env.CALLBACK_URL_EXTERNAL);
     const org = await this.orgFromId(req.params.id);
     if (!org) {
       return res.sendStatus(404);
