@@ -158,26 +158,25 @@ export class OpenIdController {
     })(req, res, next);
   }
 
-  // @UseGuards(AuthGuard('jwt'))
   @Get('/me')
   public async me(
     @Req() req: Request,
     @Res() res: Response,
     // @Next() next: NextFunction,
   ) {
-    if (!req.user) {
+    console.log(`req.isAuthenticated() /me`, req.isAuthenticated());
+
+    if (req.isUnauthenticated()) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
     const user: User = await this.prisma.user.findUnique({
       where: {
+        // @ts-expect-error some
         id: req.user['id'],
       },
     });
 
     delete user.password;
-
-    console.log('user', user);
-
     res.json({
       user,
     });

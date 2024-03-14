@@ -8,16 +8,16 @@ import { PassportModule } from '@nestjs/passport';
 import { PrismaService } from './prisma/prisma.service';
 import { OpenIdModule } from './openid/openid.module';
 import { OpenIdController } from './openid/openid.controller';
+import { SessionSerializer } from './session.serializer'; // You need to create this file
 
 @Module({
   imports: [
     ScimModule,
     PrismaModule,
-    PrismaModule,
-    PassportModule,
+    PassportModule.register({ session: true }), // Enable session support,
     OpenIdModule,
   ],
   controllers: [AppController, OpenIdController],
-  providers: [AppService, BearerStrategy, PrismaService],
+  providers: [AppService, BearerStrategy, PrismaService, SessionSerializer],
 })
 export class AppModule {}
