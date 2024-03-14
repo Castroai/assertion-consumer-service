@@ -17,7 +17,7 @@ model User {
   name               String
   // Todo       Todo[]
   org                Org?         @relation(fields: [orgId], references: [id])
-  orgId              Int?
+  orgId              String?
   externalId         String?
   active             Boolean?
   Team               Team?        @relation(fields: [teamId], references: [id])
@@ -71,7 +71,7 @@ model Session {
 }
 
 model Org {
-  id                     Int     @id @default(autoincrement())
+  id                     String  @id @default(uuid())
   domain                 String  @unique
   issuer                 String  @default("")
   authorization_endpoint String  @default("")
@@ -79,7 +79,7 @@ model Org {
   userinfo_endpoint      String  @default("")
   client_id              String  @default("")
   client_secret          String  @default("")
-  apikey                 String
+  apikey                 String  @unique
   // Todo                   Todo[]
   User                   User[]
   idpType                String?

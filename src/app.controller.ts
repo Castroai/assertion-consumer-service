@@ -1,13 +1,15 @@
 import { Controller, Get, Next, Req, Res } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
+import { AppService } from './app.service';
 
 @Controller('/')
 export class AppController {
-  constructor() {}
+  constructor(private readonly appService: AppService) {}
 
   @Get('/')
   public async check(@Req() req: Request, @Res() res: Response) {
-    res.send('Good');
+    const msg = this.appService.getHello();
+    res.send(msg);
   }
   @Get('/signout')
   public async signOut(
@@ -15,11 +17,8 @@ export class AppController {
     @Res() res: Response,
     @Next() next: NextFunction,
   ) {
-    console.log(`signout method called now`);
-    console.log(`req.isAuthenticated() /logout`, req.isAuthenticated());
     req.logout(function (err) {
       if (err) {
-        console.log(`errr`, err);
         return next(err);
       }
       res.sendStatus(204);

@@ -16,6 +16,8 @@ const seed = async () => {
         client_secret:
           '6vMOSYbZyNE8uDx26ioXgozbn7gNhxEdPkO92MlJbQArlVa-0JNFe-aDXy4FsBjA',
         idpType: 'okta',
+        userinfo_endpoint:
+          'https://dev-48986703.okta.com/oauth2/default/v1/userinfo',
       },
     });
     return data;

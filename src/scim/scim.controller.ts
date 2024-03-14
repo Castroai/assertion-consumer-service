@@ -18,7 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 // To funnel users into their designated orgs
-const ORG_ID = 1;
+// const ORG_ID = '80f493a0-ecb4-4aff-aec2-4bbaebdf01ce';
 
 interface IUserSchema {
   schemas: string[];
@@ -62,6 +62,7 @@ export class ScimController {
   @Post('/Users')
   async create(@Req() req: RawBodyRequest<Request>, @Res() res: Response) {
     // Format to SCIM standard
+    const ORG_ID = req['orgId'];
     const newUser: IUserSchema = req.body;
     const { emails, password } = req.body;
     const externalId = newUser.externalId;
@@ -97,8 +98,6 @@ export class ScimController {
     // If there is any records returned, then we have a duplicate
     if (duplicateUser) {
       // User Found... Error
-      console.log('Account Exist ID: ', duplicateUser.id);
-
       userResponse = {
         schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
         detail: 'User already exists in the database: ' + duplicateUser.id,
@@ -120,9 +119,6 @@ export class ScimController {
           active,
         },
       });
-
-      console.log('Account Created ID: ', user.id);
-
       userResponse = {
         ...defaultUserSchema,
         id: `${user.id}`,
@@ -149,6 +145,7 @@ export class ScimController {
 
   @Get('/Users')
   async findAll(@Req() req, @Res() res: Response) {
+    const ORG_ID = req['orgId'];
     // RFC Notes on Pagination: https://www.rfc-editor.org/rfc/rfc7644#section-3.4.2.4
     const DEFAULT_START_INDEX = '1';
     const DEFAULT_RECORD_LIMIT = '100';
@@ -184,7 +181,6 @@ export class ScimController {
       } else {
         // Email string is wrapped in "", remove the double quotes
         email = filterParams[FILTER_VALUE].replaceAll('"', '');
-        console.log('Filter Detected: userName EQ ', email);
       }
     }
 
@@ -255,6 +251,8 @@ export class ScimController {
     @Req() req,
     @Res() res: Response,
   ) {
+    const ORG_ID = req['orgId'];
+
     const id = req.params.userId;
     const user = await this.prisma.user.findFirst({
       select: {
@@ -311,6 +309,8 @@ export class ScimController {
     @Req() req,
     @Res() res: Response,
   ) {
+    const ORG_ID = req['orgId'];
+
     const id = req.params.userId;
     const userCount = await this.prisma.user.count({
       where: {
