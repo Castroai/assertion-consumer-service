@@ -10,13 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      PROJECT_NAME: assertion-consumer-service
+      PROJECT_ENVIORMENT: dev
       AWS_REGION: us-east-1
-      ECR_REPO: my-ecr-repository
+      ECR_REPO: $PROJECT_NAME-$PROJECT_ENVIORMENT-ecr
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      ECS_CLUSTER: simple-setup-cluster-dev
-      ECS_SERVICE: asc-service-dev
+      ECS_CLUSTER: $PROJECT_NAME-$PROJECT_ENVIORMENT-ecs-cluster
+      ECS_SERVICE: $PROJECT_NAME-$PROJECT_ENVIORMENT-ecs-service
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
