@@ -1,0 +1,35 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Applying all pending migrations to the database...
+      - npx prisma migrate deploy
+      - echo Building the Docker image...
+      - docker build -t $ECR_REPO .
+      - echo Tagging the Docker image...
+      - docker tag $ECR_REPO:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker image to Amazon ECR...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
+      - echo Updating ECS service...
+      - aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
+
+environment:
+  variables:
+    PROJECT_NAME: 'assertion-consumer-service'
+    PROJECT_ENVIRONMENT: 'dev'
+    AWS_REGION: 'us-east-1'
+    ECR_REPO: $PROJECT_NAME-$PROJECT_ENVIRONMENT-ecr
+    AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID
+    ECS_CLUSTER: $PROJECT_NAME-$PROJECT_ENVIRONMENT-ecs-cluster
+    ECS_SERVICE: $PROJECT_NAME-$PROJECT_ENVIRONMENT-ecs-service
+    DATABASE_URL: $DATABASE_URL
